@@ -15,4 +15,9 @@ public class HtmlParserController {
     public String parseHtml(@RequestParam String url) {
         return htmlParserService.getTitle(url);
     }
+
+    @GetMapping("/man-clothes")
+    public String parseMans(@RequestParam String url) {
+        return htmlParserService.getAdProductItems(url);
+    }
 }
