@@ -1,5 +1,7 @@
 package com.oh3g.nextrend.service;
 
+import com.oh3g.nextrend.dto.ProductDto;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -7,7 +9,10 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+@Slf4j
 @Service
 public class HtmlParserService {
     public String getTitle(String url) {
@@ -30,41 +35,55 @@ public class HtmlParserService {
         }
     }
 
-    public String getAdProductItems(String url) {
+    public List<ProductDto> getAdProductItems(String url) {
+        List<ProductDto> productList = new ArrayList<>();
+
         try {
             Document document = Jsoup.connect(url).get();
-            Elements productItems = document.select("div.product_item__MDtDF");
-            StringBuilder result = new StringBuilder();
+            Elements liBoxElements = document.select(".list-box .li_box");
 
-            for (Element productItem : productItems) {
+            for (Element liBox : liBoxElements) {
+                ProductDto productDto = new ProductDto();
+
                 // 이미지 요소
-                Element productInner = productItem.selectFirst(".product_inner__gr8QR");
+                Element imgBlockElement = liBox.selectFirst(".img-block img");
+                if (imgBlockElement != null) {
+                    String imageUrl = imgBlockElement.attr("src");
+                    productDto.setImageUrl(imageUrl);
+                } else {
+                    log.warn("Thumbnail area not found for product item: {}", liBox);
+                }
 
-                Element thumbnailArea = productInner.selectFirst(".product_img_area__cUrko");
-                String thumbnailUrl = thumbnailArea.attr("src");
-
-                // 정보 요소
-                Element infoArea = productInner.selectFirst(".product_info_area__xxCTi");
-                Element link = infoArea.selectFirst(".product_link__TrAac");
-                String productLink = link.attr("href");
-                String productText = link.text();
+                // 정보 요소(브랜드, 상품명, 상품 링크)
+                Element articleInfoElement = liBox.selectFirst(".article_info");
+                Element brand = articleInfoElement.selectFirst(".item_title a");
+                Element title = articleInfoElement.selectFirst(".list_info a");
+                productDto.setProductBrand(brand.text());
+                productDto.setProductName(title.text());
+                productDto.setProductLink(title.attr("href"));
 
                 // 가격 요소 선택
-                Element price = infoArea.selectFirst(".price");
-                String priceText = price.text();
+                Element price = articleInfoElement.selectFirst(".price");
+                productDto.setPrice(price.ownText().trim());
 
-                // 결과에 각 요소들의 정보를 추가합니다.
-                result.append("Image URL: ").append(thumbnailUrl).append("<br>");
-                result.append("productText: ").append(productText).append("<br>");
-                result.append("Product Link: ").append(productLink).append("<br>");
-                result.append("Price: ").append(priceText).append("<br>");
-                result.append("----------------------------------------<br>");
+                // 모든 정보가 채워진 경우에만 리스트에 추가
+                if (isProductInfoComplete(productDto)) {
+                    productList.add(productDto);
+                    log.info("Product DTO: {}", productDto);
+                }
             }
-
-            return result.toString();
         } catch (IOException e) {
-            e.printStackTrace();
-            return "Error occurred while fetching ad product items";
+            log.error("Error occurred while fetching ad product items", e);
         }
+        return productList;
+    }
+
+    // 모든 필드가 채워져 있는지 확인하는 메서드
+    private boolean isProductInfoComplete(ProductDto productDto) {
+        return productDto.getImageUrl() != null && !productDto.getImageUrl().isEmpty()
+                && productDto.getProductBrand() != null && !productDto.getProductBrand().isEmpty()
+                && productDto.getProductName() != null && !productDto.getProductName().isEmpty()
+                && productDto.getProductLink() != null && !productDto.getProductLink().isEmpty()
+                && productDto.getPrice() != null && !productDto.getPrice().isEmpty();
     }
 }
