@@ -1,4 +1,4 @@
-package com.oh3g.nextrend.dto;
+package com.oh3g.nextrend.dto.search;
 
 import lombok.Builder;
 import lombok.Data;
