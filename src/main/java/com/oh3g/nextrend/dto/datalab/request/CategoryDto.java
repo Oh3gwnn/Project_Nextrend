@@ -8,4 +8,12 @@ import java.util.List;
 public class CategoryDto {
     String name;
     List<String> param;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "name='" + name + '\'' +
+                ", param=" + param +
+                '}';
+    }
 }
