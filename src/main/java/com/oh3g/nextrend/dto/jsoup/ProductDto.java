@@ -1,11 +1,9 @@
-package com.oh3g.nextrend.dto;
-
+package com.oh3g.nextrend.dto.jsoup;
 
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Setter @Getter
 public class ProductDto {
     private String imageUrl;
     private String productBrand;
@@ -13,7 +11,16 @@ public class ProductDto {
     private String productLink;
     private String price;
 
-    // 생성자, getter 및 setter 메서드는 생략합니다.
+    public ProductDto() {
+    }
+
+    public ProductDto(String imageUrl, String productBrand, String productName, String productLink, String price) {
+        this.imageUrl = imageUrl;
+        this.productBrand = productBrand;
+        this.productName = productName;
+        this.productLink = productLink;
+        this.price = price;
+    }
 
     @Override
     public String toString() {
