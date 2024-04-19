@@ -1,6 +1,7 @@
 package com.oh3g.nextrend.service;
 
-import com.oh3g.nextrend.dto.ProductDto;
+import com.oh3g.nextrend.dto.jsoup.ProductDto;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class HtmlParserService {
     public String getTitle(String url) {
         try {
@@ -37,18 +39,17 @@ public class HtmlParserService {
 
     public List<ProductDto> getAdProductItems(String url) {
         List<ProductDto> productList = new ArrayList<>();
-
         try {
-            Document document = Jsoup.connect(url).get();
-            Elements liBoxElements = document.select(".list-box .li_box");
+            Document doc = Jsoup.connect(url).get();
+            Elements liBoxElements = doc.select(".list-box .li_box");
 
             for (Element liBox : liBoxElements) {
                 ProductDto productDto = new ProductDto();
 
                 // 이미지 요소
-                Element imgBlockElement = liBox.selectFirst(".img-block img");
-                if (imgBlockElement != null) {
-                    String imageUrl = imgBlockElement.attr("src");
+                Element imgElement = liBox.selectFirst(".list_img img.lazyload.lazy");
+                if (imgElement != null) {
+                    String imageUrl = imgElement.attr("data-original");
                     productDto.setImageUrl(imageUrl);
                 } else {
                     log.warn("Thumbnail area not found for product item: {}", liBox);
@@ -69,7 +70,6 @@ public class HtmlParserService {
                 // 모든 정보가 채워진 경우에만 리스트에 추가
                 if (isProductInfoComplete(productDto)) {
                     productList.add(productDto);
-                    log.info("Product DTO: {}", productDto);
                 }
             }
         } catch (IOException e) {

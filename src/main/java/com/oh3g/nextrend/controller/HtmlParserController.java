@@ -1,6 +1,6 @@
 package com.oh3g.nextrend.controller;
 
-import com.oh3g.nextrend.dto.ProductDto;
+import com.oh3g.nextrend.dto.jsoup.ProductDto;
 import com.oh3g.nextrend.service.HtmlParserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
