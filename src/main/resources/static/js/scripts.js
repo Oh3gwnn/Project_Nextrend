@@ -1,7 +1,23 @@
-/*!
-* Start Bootstrap - Shop Homepage v5.0.6 (https://startbootstrap.com/template/shop-homepage)
-* Copyright 2013-2023 Start Bootstrap
-* Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-shop-homepage/blob/master/LICENSE)
-*/
-// This file is intentionally blank
-// Use this file to add JavaScript to your project
+
+  // SEARCH
+  document.addEventListener('DOMContentLoaded', function() {
+    var searchForm = document.getElementById('searchForm');
+    var searchInput = document.getElementById('searchInput');
+
+    if (searchForm && searchInput) {
+      searchForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        search();
+      });
+    }
+
+    function search() {
+      var query = searchInput.value.trim();
+      if (query !== "") {
+        var redirectURL = "/result?q=" + encodeURIComponent(query);
+        window.location.href = redirectURL;
+      } else {
+        console.log("검색어를 입력하세요.");
+      }
+    }
+  });
