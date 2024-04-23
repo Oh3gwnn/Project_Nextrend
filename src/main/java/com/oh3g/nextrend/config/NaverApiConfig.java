@@ -5,10 +5,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class NaverApiConfig {
-    @Value("${naver.api.client-id}")
+    @Value("${NAVER_API_CLIENT_ID}")
     private String clientId;
 
-    @Value("${naver.api.client-secret}")
+    @Value("${NAVER_API_CLIENT_SECRET}")
     private String clientSecret;
 
     public String getClientId() {
