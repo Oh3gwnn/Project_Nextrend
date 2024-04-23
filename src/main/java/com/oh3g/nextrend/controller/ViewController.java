@@ -36,6 +36,6 @@ public class ViewController {
 
     @GetMapping
     public String getSearch() {
-        return "index";
+        return "insight";
     }
 }
