@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class DataDto {
     private String period;
+    private String group;
     private double ratio;
 }
