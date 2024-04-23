@@ -8,6 +8,6 @@ import java.util.List;
 @Data
 public class ResultDto {
     private String title;
-    private String category;
+    private List<String> keyword;
     private List<DataDto> data;
 }
