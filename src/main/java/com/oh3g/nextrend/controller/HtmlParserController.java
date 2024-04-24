@@ -24,4 +24,9 @@ public class HtmlParserController {
     public List<ProductDto> parseMans(@RequestParam String url) {
         return htmlParserService.getAdProductItems(url);
     }
+
+    @GetMapping("/health-check")
+    public String healthCheck() {
+        return "OK";
+    }
 }
