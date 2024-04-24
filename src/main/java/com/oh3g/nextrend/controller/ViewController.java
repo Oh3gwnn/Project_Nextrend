@@ -38,4 +38,9 @@ public class ViewController {
     public String getSearch() {
         return "insight";
     }
+
+    @GetMapping("/health-check")
+    public String healthcheck() {
+        return "OK";
+    }
 }
