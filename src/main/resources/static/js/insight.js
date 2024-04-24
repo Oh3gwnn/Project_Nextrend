@@ -137,3 +137,16 @@ function getSelectedOption(groupName) {
     }
     return '전체';
 }
+
+// 선택항목 토글
+document.addEventListener('DOMContentLoaded', function() {
+    var toggleIcon = document.getElementById('toggleIcon');
+
+    document.getElementById('collapseOptions').addEventListener('show.bs.collapse', function() {
+        toggleIcon.innerText = '▲';
+    });
+
+    document.getElementById('collapseOptions').addEventListener('hide.bs.collapse', function() {
+        toggleIcon.innerText = '▼';
+    });
+});

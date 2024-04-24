@@ -57,7 +57,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-3 py-1">
                         <div class="form-group">
                             <select id="categorySelect" class="form-select border border-dark" aria-label="카테고리 선택">
                                 <option value="50000000" selected>패션의류</option>
@@ -92,9 +92,16 @@
         </div>
         <!-- 필수 항목 끝 -->
 
-        <!-- 선택 항목: device, gender, ages -->
+        <!-- 선택 항목 : device, gender, ages -->
         <div class="row justify-content-center">
-            <div class="col-md-9"><h5 class="fw-bolder">선택 옵션</h5></div>
+            <div class="col-md-9">
+                <h5 class="fw-bolder" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOptions" aria-expanded="false" aria-controls="collapseOptions">
+                    선택 항목 <span id="toggleIcon" class="fw-bold">▼</span>
+                </h5>
+            </div>
+        </div>
+
+        <div class="collapse" id="collapseOptions">
             <div class="col-md-11">
                 <div class="row">
                     <div class="col-md-3">
@@ -111,7 +118,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 p-0">
+                    <div class="col-md-3 py-1">
                         <div class="form-group">
                             <div class="btn-group" role="group" aria-label="Gender toggle button group">
                                 <input type="radio" class="btn-check" name="genderOptions" id="genderOptionAll" value="all" autocomplete="off" checked>
@@ -125,7 +132,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 p-0">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <div class="btn-group" role="group" aria-label="Age toggle button group">
                                 <button class="btn btn-outline-dark" id="allAge" onclick="toggleAllAges()">전체</button>
@@ -154,6 +161,7 @@
             </div>
         </div>
 
+        <!-- SEARCH SPACE -->
         <div class="row justify-content-center py-4">
             <div class="col-md-6 py-5">
                 <form class="input-group" id="searchForm">
