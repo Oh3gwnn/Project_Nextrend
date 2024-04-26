@@ -35,7 +35,6 @@ public class NaverShoppingInsightService {
         requestHeaders.put("Content-Type", "application/json");
 
         String requestBody = convertObjectToJsonString(datalabRequestDto);
-        log.info(requestBody);
         log.info(requestHeaders.toString());
         HttpURLConnection con = connect(apiUrl);
 
