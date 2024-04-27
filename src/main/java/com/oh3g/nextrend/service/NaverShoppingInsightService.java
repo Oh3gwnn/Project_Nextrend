@@ -1,7 +1,6 @@
 package com.oh3g.nextrend.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oh3g.nextrend.config.NaverApiConfig;
 import com.oh3g.nextrend.dto.datalab.request.DatalabRequestDto;
@@ -14,9 +13,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -25,8 +22,7 @@ import java.util.Map;
 public class NaverShoppingInsightService {
     private final NaverApiConfig naverApiConfig;
 
-    public List<DatalabResponseDto> callNaverShoppingTrendsAPI(DatalabRequestDto datalabRequestDto) {
-
+    public DatalabResponseDto callNaverShoppingTrendsAPI(DatalabRequestDto datalabRequestDto) {
         String apiUrl = "https://openapi.naver.com/v1/datalab/shopping/category/keyword/age";
 
         Map<String, String> requestHeaders = new HashMap<>();
@@ -35,6 +31,7 @@ public class NaverShoppingInsightService {
         requestHeaders.put("Content-Type", "application/json");
 
         String requestBody = convertObjectToJsonString(datalabRequestDto);
+        log.info(requestBody);
         log.info(requestHeaders.toString());
         HttpURLConnection con = connect(apiUrl);
 
@@ -52,13 +49,9 @@ public class NaverShoppingInsightService {
 
             int responseCode = con.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 응답
-                ObjectMapper objectMapper = new ObjectMapper();
-                List<DatalabResponseDto> responseDtoList =
-                        objectMapper.readValue(con.getInputStream(), new TypeReference<List<DatalabResponseDto>>() {});
-                return responseDtoList;
+                return readBody(con.getInputStream());
             } else {  // 에러 응답
-                String errorResponse = readBody(con.getErrorStream());
-                throw new RuntimeException("API 요청이 실패했습니다. 응답 코드: " + responseCode + ", 에러 메시지: " + errorResponse);
+                return readBody(con.getInputStream());
             }
         } catch (IOException e) {
             throw new RuntimeException("API 요청과 응답 실패", e);
@@ -78,18 +71,10 @@ public class NaverShoppingInsightService {
         }
     }
 
-    private static String readBody(InputStream body) {
-        InputStreamReader streamReader = new InputStreamReader(body, StandardCharsets.UTF_8);
-
-        try (BufferedReader lineReader = new BufferedReader(streamReader)) {
-            StringBuilder responseBody = new StringBuilder();
-
-            String line;
-            while ((line = lineReader.readLine()) != null) {
-                responseBody.append(line);
-            }
-
-            return responseBody.toString();
+    private static DatalabResponseDto readBody(InputStream body) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readValue(body, DatalabResponseDto.class);
         } catch (IOException e) {
             throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
         }
