@@ -120,7 +120,11 @@ document.getElementById('searchButton').addEventListener('click', function () {
             throw new Error('Network response was not ok');
         }
         console.log("Data sent successfully!");
-        // Handle response from server if needed
+        return response.json();
+    })
+    .then(data => {
+        window.localStorage.setItem('resMessage', data.message);
+        window.localStorage.setItem('resData', JSON.stringify(data.datalabResponseDto));
     })
     .catch(error => {
         console.error('There was a problem with your fetch operation:', error);
