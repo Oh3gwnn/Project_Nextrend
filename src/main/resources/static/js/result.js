@@ -2,7 +2,7 @@
     var resMessage = localStorage.getItem('resMessage');
     var resData = localStorage.getItem('resData');
 
-    // resMessage를 출력하는 요소에 텍스트 설정
+// resMessage를 출력하는 요소에 텍스트 설정
     var insightMessageElement = document.getElementById('insightMessage');
     if (resMessage != null) {
         insightMessageElement.innerText = resMessage;
@@ -11,7 +11,10 @@
 // resData를 가지고 그래프를 그리기 위한 코드
     if (resData != null) {
         var data = JSON.parse(resData);
-        var labels = [...new Set(data.results[0].data.map(item => item.period))];
+        var labels = [...new Set(data.results[0].data.map(item => {
+            var dateParts = item.period.split('-');
+            return dateParts[1] + dateParts[2];
+        }))];
         var ageGroups = [...new Set(data.results[0].data.map(item => item.group))]; // 연령대
         var datasets = [];
 
@@ -34,6 +37,8 @@
 
     function drawChart(labels, datasets) {
         const ctx = document.getElementById('shoppingTrendsChart').getContext('2d');
+        ctx.canvas.width = window.innerWidth;
+        ctx.canvas.height = window.innerHeight*(4/7);
         var chart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -41,6 +46,9 @@
                 datasets: datasets // 검색 비율
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                minHeight: 300,
                 scales: {
                     yAxes: [{
                         beginAtZero: true,
