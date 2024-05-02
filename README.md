@@ -4,7 +4,8 @@
 
 ---
 
-### 배포 링크 : https://nextrend.shop
+### 배포 링크(잠시 중단) : https://nextrend.shop
+
 
 ### 사용 방법
 
