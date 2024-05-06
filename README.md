@@ -4,8 +4,12 @@
 
 ---
 
-### 배포 링크(잠시 중단) : https://nextrend.shop
+### 배포 링크(중단) : https://nextrend.shop
+<details><summary> 시연 영상 </summary>
 
+![Video Label](http://img.youtube.com/vi/hXsyCoo6ikg/0.jpg)
+
+</details>
 
 ### 사용 방법
 
